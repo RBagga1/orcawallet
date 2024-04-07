@@ -2547,6 +2547,18 @@ func (s *ScopedKeyManager) cloneKeyWithVersion(key *hdkeychain.ExtendedKey) (
 			return nil, fmt.Errorf("unsupported scope %v", s.scope)
 		}
 
+	case wire.FreshNet:
+		switch s.scope {
+		case KeyScopeBIP0044, KeyScopeBIP0086:
+			version = HDVersionMainNetBIP0044
+		case KeyScopeBIP0049Plus:
+			version = HDVersionMainNetBIP0049 // Adjust this based accordingly if necessary
+		case KeyScopeBIP0084:
+			version = HDVersionMainNetBIP0084
+		default:
+			return nil, fmt.Errorf("unsupported scope %v for OrcaNet", s.scope)
+		}
+
 	default:
 		return nil, fmt.Errorf("unsupported net %v", net)
 	}
